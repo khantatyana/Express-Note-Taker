@@ -34,22 +34,18 @@ module.exports = function(app){
 
     })
     // delete the note by uuid
-    app.delete("api/notes/:id", function(req, res) {
-        fs.readFile(dbPath, "utf8", function (err, data) {
+    app.delete("/api/notes/:id", function(req, res) {
+        fs.readFile(dbPath, "utf8", function (err, data2) {
             if (err) throw err;
-            let noteObj = JSON.parse(data)
+            let noteObj = JSON.parse(data2)
             let noteObjRemain = noteObj.filter(obj => (obj.id !== req.params.id));
-
-            notesArray = noteObjRemain;
-    
-            // save it back to db.json
-            let notesArrayText = JSON.stringify(noteObjRemain);
-    
-            fs.writeFile(dbPath, notesArrayText, function (err, data) {
+        
+            fs.writeFile(dbPath, JSON.stringify(noteObjRemain), function (err, data) {
                 if (err) throw err;
                 console.log("file saved with obj removed");
-                return res.json(true);
+                return res.json(noteObj);
             })
         })
+        // res.send("Hi")
     })
 }

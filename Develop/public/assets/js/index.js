@@ -27,7 +27,7 @@ var saveNote = function(note) {
 // A function for deleting a note from the db
 var deleteNote = function(id) {
   return $.ajax({
-    url: "api/notes/" + id,
+    url: "/api/notes/" + id,
     method: "DELETE"
   });
 };
@@ -54,7 +54,8 @@ var handleNoteSave = function() {
   console.log("whatever");
   var newNote = {
     title: $noteTitle.val(),
-    text: $noteText.val()
+    text: $noteText.val(),
+
   };
 
   saveNote(newNote).then(function(data) {
@@ -77,7 +78,7 @@ var handleNoteDelete = function(event) {
   if (activeNote.id === note.id) {
     activeNote = {};
   }
-
+  console.log(note.id);
   deleteNote(note.id).then(function() {
     getAndRenderNotes();
     renderActiveNote();
@@ -121,6 +122,7 @@ var renderNoteList = function(notes) {
     var $delBtn = $(
       "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
     );
+    
 
     $li.append($span, $delBtn);
     noteListItems.push($li);
