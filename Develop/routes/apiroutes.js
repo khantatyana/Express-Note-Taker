@@ -1,25 +1,55 @@
-var db = require("../db/db.json");
-// The application should have a `db.json` file on the backend that will be used to store and retrieve notes using the `fs` module.
+var fs = require('fs');
+var path = require('path');
+var uuid = require("uuid");
+var dbPath = path.join(__dirname, "../db/db.json");
 
 module.exports = function(app){
     app.get("/api/notes", function(req, res) {
-        res.json(db)
+        fs.readFile(dbPath, "utf8", function (err, data) {
+            if (err) {
+                throw err;
+            }
+            return res.json(data);
+        })
     })
 
     app.post("/api/notes", function(req, res) {
-        // if (datatable.length < 5) {
-        //     datatable.push(req.body);
-        //     return res.json(true);
-        // } else {
-        //     waitlist.push(req.body);
-        //     return res.json(false);
-        // }
-    })
-    // clear post
-    app.post("api'clear", function(req, res) {
-        // datatable.length = 0;
-        // waitlist.length = 0;
+        fs.readFile(dbPath, "utf8", function (err1, data1) {
+            if (err1) {
+                throw err1;
+            }
+            console.log(typeof(data1));
+            let dataArr = JSON.parse(data1);
+            let entry = req.body;
+            entry.id = uuid.v4();
+            dataArr.push(entry);
+            fs.writeFile(dbPath, JSON.stringify(dataArr, null, 2), function (err2) {
+                console.log("done writing");
+                if (err2) {
+                    throw err2;
+                }
+                return res.json(dataArr);
+            });
+        })
 
-        // res.json({ ok: true });
     })
-};
+    // delete the note by uuid
+    app.delete("api/notes/:id", function(req, res) {
+        fs.readFile(dbPath, "utf8", function (err, data) {
+            if (err) throw err;
+            let noteObj = JSON.parse(data)
+            let noteObjRemain = noteObj.filter(obj => (obj.id !== req.params.id));
+
+            notesArray = noteObjRemain;
+    
+            // save it back to db.json
+            let notesArrayText = JSON.stringify(noteObjRemain);
+    
+            fs.writeFile(dbPath, notesArrayText, function (err, data) {
+                if (err) throw err;
+                console.log("file saved with obj removed");
+                return res.json(true);
+            })
+        })
+    })
+}

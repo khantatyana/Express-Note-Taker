@@ -51,12 +51,15 @@ var renderActiveNote = function() {
 
 // Get the note data from the inputs, save it to the db and update the view
 var handleNoteSave = function() {
+  console.log("whatever");
   var newNote = {
     title: $noteTitle.val(),
     text: $noteText.val()
   };
 
   saveNote(newNote).then(function(data) {
+    console.log("answer");
+    console.log(data);
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -108,12 +111,13 @@ var renderNoteList = function(notes) {
   $noteList.empty();
 
   var noteListItems = [];
-
+ 
   for (var i = 0; i < notes.length; i++) {
     var note = notes[i];
-
-    var $li = $("<li class='list-group-item'>").data(note);
-    var $span = $("<span>").text(note.title);
+    var $li = $("<li class='list-group-item'>");
+    $li.data(note);
+    var $span = $("<span>");
+    $span.text(note.title);
     var $delBtn = $(
       "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
     );
@@ -128,6 +132,7 @@ var renderNoteList = function(notes) {
 // Gets notes from the db and renders them to the sidebar
 var getAndRenderNotes = function() {
   return getNotes().then(function(data) {
+    data = JSON.parse(data);
     renderNoteList(data);
   });
 };
