@@ -40,7 +40,7 @@ module.exports = function(app){
             let noteObj = JSON.parse(data2)
             let noteObjRemain = noteObj.filter(obj => (obj.id !== req.params.id));
         
-            fs.writeFile(dbPath, JSON.stringify(noteObjRemain), function (err, data) {
+            fs.writeFile(dbPath, JSON.stringify(noteObjRemain, null, 2), function (err, data) {
                 if (err) throw err;
                 console.log("file saved with obj removed");
                 return res.json(noteObj);
