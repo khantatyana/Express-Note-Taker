@@ -1,6 +1,9 @@
 # Unit 11 Express Homework: Note Taker
 
 [![Build Status](https://img.shields.io/badge/Project%20title-Express%20--%20Note%20Taker-red)](https://img.shields.io/badge/Project%20title-Express%20--%20Note%20Taker-red)
+![Image Alt Text](./Develop/public/assets/css/note1.png)
+
+https://guarded-escarpment-81435.herokuapp.com/
 
 ## Description
 
